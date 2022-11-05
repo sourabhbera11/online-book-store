@@ -13,10 +13,17 @@ app.use(cors())
 
 app.use("/api/payment",paymentRoutes);
 
+const DB = 'mongodb+srv://sourabh:sourabh@cluster0.gxyzgvj.mongodb.net/bookstore?retryWrites=true&w=majority'
 
 
-
-mongoose.connect("mongodb://localhost:27017/Register",{useNewUrlParser:true});
+mongoose.connect(DB,{
+  useNewUrlParser:true,
+  // useCreateIndex: true,
+  useUnifiedTopology: true,
+  // useFindAndModify: false
+}).then(()=> {
+  console.log('CONNECTION SUCCESSFUL');
+}).catch((err) => console.log(err));
 
   const UserSchema= new mongoose.Schema({
     name:String,
@@ -81,17 +88,6 @@ mongoose.connect("mongodb://localhost:27017/Register",{useNewUrlParser:true});
 
 
 
-
-// app.get("/",(req,res)=>
-// {
-//   obj={
-//     name:"Aditya",
-//     age:20,
-//     image:"https://img.freepik.com/free-photo/wide-angle-shot-single-tree-growing-clouded-sky-during-sunset-surrounded-by-grass_181624-22807.jpg?w=2000"
-//   }
-//   res.send(obj);
-// })
-
 app.get("/book",(req,res)=>
 {
   let arr=[];
@@ -104,15 +100,11 @@ app.get("/book",(req,res)=>
   
       attribute.forEach((names)=>
       {
-  
         arr.push(names);
-
-
         
       });
       console.log("here");
        res.send(arr);
-      //  console.log(arr)
       console.log("done");
 
      }
@@ -210,7 +202,6 @@ app.post("/signup",(req,res)=>
   {  
     try{
        console.log(adi)
-      // console.log(req.body)
       if(!err)
       {
        if(req.body.password==adi.password && req.body.name==adi.name)
